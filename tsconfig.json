@@ -1,17 +1,15 @@
 {
-  "compileOnSave": true,
-  "compilerOptions": {
-    "outDir": "build",
-    "module": "commonjs",
-    "target": "es2017",
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "noImplicitAny": false,
-    "sourceMap": true
-  },
-  "exclude": [
-    "node_modules",
-    "build"
-  ]
+   "compilerOptions": {
+      "lib": [
+         "es5",
+         "es6"
+      ],
+      "target": "es5",
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "outDir": "./build",
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "sourceMap": true
+   }
 }
