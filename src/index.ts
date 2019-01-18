@@ -43,46 +43,44 @@ bot.hears('/stealtv', (ctx) => {
 });
 
 bot.on('inline_query', async ({ inlineQuery, answerInlineQuery }) => {
-  const offset = parseInt(inlineQuery.offset) || 0;
-
   if (inlineQuery.query!=''){
-	  userservice.checkRights(inlineQuery.from.id).then((res) => {
-		  if (res===undefined){
-			  return answerInlineQuery([]);
-		  } else {
-			  return answerInlineQuery([{
-				  type: 'article',
-				  id: '0',
-				  title: 'Запланировать мероприятие',
-				  input_message_content: {
-					  message_text: inlineQuery.query + '\n' + message
-				  },
-				  reply_markup: testMenu.reply_markup
-			  }]).then(()=> {
-				  message = inlineQuery.query + '\n' + message;
-			  })
-		  }
-	  });
+  	  let userRights = await userservice.checkRights(inlineQuery.from.id);
+	  if (userRights===undefined){
+		  return answerInlineQuery([]);
+	  } else {
+		  return answerInlineQuery([{
+			  type: 'article',
+			  id: '0',
+			  title: 'Запланировать мероприятие',
+			  input_message_content: {
+				  message_text: inlineQuery.query + '\n' + message
+			  },
+			  reply_markup: testMenu.reply_markup
+		  }]).then(()=> {
+			  message = inlineQuery.query + '\n' + message;
+		  })
+	  }
   }
 
 });
 
 bot.action(/^act_+/, async (ctx) => {
-	userservice.findUser(ctx.update.callback_query.from.id).then((response) => {
-		if (response===undefined) {
-			let user = new User();
-			user.id = ctx.update.callback_query.from.id;
-			user.firstName = ctx.update.callback_query.from.first_name;
-			user.lastName = ctx.update.callback_query.from.last_name;
-			user.username = ctx.update.callback_query.from.username;
-			userservice.addUser(user);
-		} else {
-			console.log(response);
-		}
-	});
+	let user = await userservice.findUser(ctx.update.callback_query.from.id);
+	if (user!==undefined) {
+		console.log("Existing user voted: ", user.username, user.firstName+ ' '+ user.lastName);
+	} else {
+		let nuser = new User();
+		nuser.id = ctx.update.callback_query.from.id;
+		nuser.firstName = ctx.update.callback_query.from.first_name;
+		nuser.lastName = ctx.update.callback_query.from.last_name;
+		nuser.username = ctx.update.callback_query.from.username;
+		await userservice.addUser(nuser);
+		console.log("New user voted: ", nuser.username, nuser.firstName+ ' '+ nuser.lastName);
+	}
+
 
     let option =  ctx.match['input'];
-    let reply = 'Мямля!';
+    let reply = 'Ну чего ты мнёшься?';
     if (option == 'act_sure'){
         reply = 'Молодец!';
     }

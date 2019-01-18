@@ -2,14 +2,12 @@ import {User} from "../entity/User";
 
 export class UserService {
 
-
     async findUser(id: string) {
-        let user = await User.findOne({where: {id: id}});
-        return user
+        return await User.findOne({where: {id: id}});
     }
 
     async addUser(user: User) {
-        await User.save(user);
+        return await User.save(user);
     }
 
     async checkRights(userid: string){

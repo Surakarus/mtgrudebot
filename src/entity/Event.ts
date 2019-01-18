@@ -1,8 +1,8 @@
-import {Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, BeforeInsert} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, BeforeInsert, BaseEntity} from "typeorm";
 import {User} from './User'
 
 @Entity()
-export class Event {
+export class Event extends BaseEntity{
 
     @PrimaryGeneratedColumn('uuid')
     id: string;
