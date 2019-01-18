@@ -5,7 +5,6 @@ export class UserService {
 
     async findUser(id: string) {
         let user = await User.findOne({where: {id: id}});
-        console.log(user);
         return user
     }
 
@@ -13,4 +12,7 @@ export class UserService {
         await User.save(user);
     }
 
+    async checkRights(userid: string){
+        return await User.findOne({where: {id: userid, isAdmin: true}});
+    }
 }
